@@ -1,0 +1,5 @@
+dist/
+.publish/
+.deploy/
+node_modules/
+*.log

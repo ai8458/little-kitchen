@@ -1,0 +1,14 @@
+{
+  "name": "little-kitchen-rush",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "热锅搭档 — 本地双人厨房协作游戏",
+  "scripts": {
+    "start": "node server.mjs --open",
+    "dev": "node server.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check engine.js && node --check renderer.js && node --check app.js",
+    "build": "node build.mjs"
+  }
+}
