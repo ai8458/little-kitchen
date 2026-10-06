@@ -2,12 +2,14 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#f7f5ed">
+  <meta name="app-version" content="1.1.0">
   <meta name="description" content="热锅搭档：一间小厨房，两位大厨。取菜、切菜、煮汤、装盘、洗碗，享受单人或本地双人合作的厨房时光。">
   <title>热锅搭档 · Little Kitchen</title>
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=1.1.0">
+  <link rel="stylesheet" href="./mobile.css?v=1.1.0">
 </head>
 <body>
   <div class="app-shell">
@@ -19,10 +21,13 @@
       <section class="page-heading"><div><div class="eyebrow"><span></span> A LITTLE CHAOS, A LOT OF FLAVOUR</div><h1>小小厨房，<em>忙得刚好。</em></h1><p>把烟火气端上餐桌，和搭档一起好好吃饭。</p></div><div class="heading-note"><span class="hand-star">✳</span><span>今日宜<br><strong>默契开饭</strong></span></div></section>
       <div class="game-layout">
         <section class="kitchen-panel" aria-label="厨房游戏">
+          <div class="mobile-hud"><div class="mobile-clock"><span>◷</span><strong id="mobileTimer">04:00</strong></div><div class="mobile-revenue"><small>收入</small><strong id="mobileScore">0</strong></div><nav aria-label="手机游戏工具"><button id="cameraBtn" aria-pressed="false" title="查看整间厨房">全景</button><button id="mobileHelpBtn" aria-label="打开玩法说明">指南</button><button id="mobilePauseBtn" aria-label="暂停游戏">暂停</button></nav></div>
           <div class="kitchen-toolbar"><div><span class="live-dot"></span><strong id="levelTitle">01 / 阳光小馆</strong><span class="toolbar-divider"></span><span id="modeLabel">单人 · 可切换厨师</span></div><span class="toolbar-note" id="sessionLabel">准备开张</span></div>
           <div class="orders-bar"><div class="orders-label"><span>订单夹</span><small>ORDERS</small><span id="orderCount" class="order-count">02</span></div><div id="orders" class="orders" aria-label="待完成订单"></div></div>
           <div class="canvas-wrap">
             <canvas id="gameCanvas" width="1120" height="730" tabindex="0" aria-label="厨房游戏区域。WASD 移动，E 拿放，空格切菜洗碗，Shift 冲刺。"></canvas>
+            <div id="mobilePotAlerts" class="mobile-pot-alerts" aria-label="锅的状态"></div>
+            <span class="mobile-camera-note" id="cameraNote">镜头跟随 · 右下角查看位置</span>
             <div id="startOverlay" class="game-overlay">
               <div class="welcome-card"><div class="welcome-stamp">MADE WITH TEAMWORK</div><div class="welcome-art" aria-hidden="true"><span>🍅</span><span class="plate-art">♨</span><span>🥬</span></div><span class="tiny-label">欢迎来到你的小厨房</span><h2>今天，也要<br>配合得<em>热气腾腾。</em></h2><p>切点菜，煮锅汤，忙里偷个笑。<br>一个人从容掌勺，两个人默契开饭。</p><div class="mode-picker" role="group" aria-label="游戏模式"><button class="mode-choice selected" data-mode="solo" aria-pressed="true"><span>♙</span><strong>单人掌勺</strong><small>Tab 切换两位厨师</small></button><button class="mode-choice" data-mode="duo" aria-pressed="false"><span>♙♙</span><strong>双人搭档</strong><small>同一键盘，合作开饭</small></button></div><button id="startBtn" class="primary-btn">系好围裙，开张！<span>→</span></button><button id="practiceBtn" class="text-btn">先练练手 · 不限时练习 <span>↗</span></button></div>
             </div>
@@ -30,7 +35,7 @@
             <div id="resultOverlay" class="game-overlay" hidden><div class="modal-card result-card"><span class="tiny-label">THAT'S A WRAP!</span><div class="result-stars" id="resultStars">★★★</div><h2 id="resultTitle">今日营业结束</h2><p id="resultCopy"></p><div class="result-score"><span id="resultScore">0</span><small>营业收入</small></div><div class="result-stats"><div><strong id="resultServed">0</strong><span>完成订单</span></div><div><strong id="resultMissed">0</strong><span>超时订单</span></div><div><strong id="resultCombo">0</strong><span>最高连单</span></div></div><button id="againBtn" class="primary-btn">再开一局 <span>↻</span></button><button id="nextBtn" class="secondary-btn">下一间厨房 →</button><button id="resultMenuBtn" class="text-btn">返回菜单</button></div></div>
             <div id="toast" class="toast" role="status" aria-live="polite"></div>
           </div>
-          <div class="context-bar"><span class="context-icon">✦</span><span id="contextText">小贴士：食材要先切好，料理装盘后才能交给客人。</span><span class="context-shortcut"><kbd>Esc</kbd> 暂停</span></div>
+          <div class="context-bar"><div class="mobile-inventory"><span class="chef-dot" id="mobileChefDot"></span><b id="mobileChef">P1</b><strong id="mobileHeld">空手</strong></div><span class="context-icon">✦</span><span id="contextText">小贴士：食材要先切好，料理装盘后才能交给客人。</span><span class="context-shortcut"><kbd>Esc</kbd> 暂停</span></div>
         </section>
         <aside class="sidebar">
           <section class="shift-card"><div class="section-kicker">本次营业 <span id="practiceBadge">4 MIN SHIFT</span></div><div class="time-display"><span class="clock-icon">◷</span><span id="timer">04:00</span></div><div class="time-track"><i id="timeFill"></i></div><div class="score-row"><span>营业收入</span><strong><span class="coin">✦</span><span id="score">0</span></strong></div><div class="star-track" id="starTrack"><span>☆ <small>250</small></span><span>☆ <small>550</small></span><span>☆ <small>850</small></span></div><div class="combo-row"><span id="comboText">按订单顺序交餐，收获连单奖励</span><b id="comboValue">×1</b></div></section>
@@ -42,8 +47,8 @@
       <footer><span><b>♨</b> 热锅搭档 <i>·</i> 让每一次手忙脚乱，都成为好时光。</span><span>原创轻量厨房游戏 <i>·</i> 本地双人合作</span></footer>
     </main>
   </div>
-  <dialog id="helpDialog"><div class="help-header"><div><span class="tiny-label">THE LITTLE KITCHEN HANDBOOK</span><h2>开张之前，认识一下厨房。</h2></div><button id="closeHelpBtn" class="close-btn" aria-label="关闭玩法说明">×</button></div><div class="help-flow"><div><b>01</b><strong>取食材</strong><p>走到左侧菜筐，朝向它按 E。食材无限供应。</p></div><div><b>02</b><strong>切一切</strong><p>在切菜板按 E 放下食材，按住空格切好，再按 E 拿走。</p></div><div><b>03</b><strong>做好装盘</strong><p>沙拉：用切好的菜与餐盘交互。汤：三份切好的汤料入锅，煮好后拿空盘盛出。</p></div><div><b>04</b><strong>出餐洗盘</strong><p>拿料理到右侧出餐口按 E。用过的盘子会回到底部，放进水槽按住空格清洗。</p></div></div><div class="help-details"><p><strong>默契加分</strong>优先完成最左边的订单，最多叠加 4 连单。及时出餐还有小费；订单超时扣 30 分并清空连单。</p><p><strong>盯紧你的锅</strong>汤煮 10 秒，完成后 19 秒会烧焦起火。拿底部灭火器，面对锅按住操作键灭火；再空手取出烧焦食物，丢进垃圾桶。</p><p><strong>善用搭档</strong>单人按 Tab 切换厨师，另一位会留在原地；双人各自独立移动。按 Shift 冲刺，Q 投掷食材，可以传到空台面或空手搭档手中。</p><p><strong>拿错了也没关系</strong>空台面可以暂存任何手持物品。地上的物品走近按拿放键拾取。拿餐盘对垃圾桶按拿放键，只倒掉食物，不会丢掉盘子。</p><p><strong>键盘与手机</strong>推荐电脑键盘游玩。手机会显示方向键和操作按钮，适合单人；双人需要同一把支持多键同时按下的键盘。</p></div><button id="helpDoneBtn" class="primary-btn">明白了，准备开饭 →</button></dialog>
-  <div id="touchControls" class="touch-controls" aria-label="触屏操作"><div class="dpad"><button data-hold="KeyW" class="up" aria-label="向上">↑</button><button data-hold="KeyA" class="left" aria-label="向左">←</button><button data-hold="KeyS" class="down" aria-label="向下">↓</button><button data-hold="KeyD" class="right" aria-label="向右">→</button></div><div class="touch-actions"><button data-tap="Tab" class="touch-small">换人</button><button data-tap="ShiftLeft" class="touch-small">冲刺</button><button data-hold="Space">按住<br>操作</button><button data-tap="KeyE" class="touch-pick">拿放</button></div></div>
-  <script type="module" src="./app.js"></script>
+  <dialog id="helpDialog"><div class="help-header"><div><span class="tiny-label">THE LITTLE KITCHEN HANDBOOK</span><h2>开张之前，认识一下厨房。</h2></div><button id="closeHelpBtn" class="close-btn" aria-label="关闭玩法说明">×</button></div><div class="help-flow"><div><b>01</b><strong>取食材</strong><p>走到左侧菜筐，朝向它点拿放（键盘 E）。食材无限供应。</p></div><div><b>02</b><strong>切一切</strong><p>把食材放在切菜板，长按操作（键盘空格）切好，再拿走。</p></div><div><b>03</b><strong>做好装盘</strong><p>沙拉：用切好的菜与餐盘交互。汤：三份切好的汤料入锅，煮好后拿空盘盛出。</p></div><div><b>04</b><strong>出餐洗盘</strong><p>拿料理到右侧出餐口交餐。用过的盘子会回到底部，放进水槽长按操作清洗。</p></div></div><div class="help-details"><p><strong>默契加分</strong>优先完成最左边的订单，最多叠加 4 连单。及时出餐还有小费；订单超时扣 30 分并清空连单。</p><p><strong>盯紧你的锅</strong>汤煮 10 秒，完成后 19 秒会烧焦起火。拿底部灭火器，面对锅按住操作键灭火；再空手取出烧焦食物，丢进垃圾桶。</p><p><strong>善用搭档</strong>单人点换人（键盘 Tab）切换厨师，另一位留在原地。点冲刺（Shift）加速，点投掷（Q）传食材给空台面或空手搭档。</p><p><strong>拿错了也没关系</strong>空台面可以暂存任何手持物品。地上的物品走近按拿放键拾取。拿餐盘对垃圾桶按拿放键，只倒掉食物，不会丢掉盘子。</p><p><strong>键盘与手机</strong>手机用左侧摇杆移动，轻推可慢走；右侧拿放、长按操作。点全景查看厨房，点跟随放大。双人需要同一把支持多键同时按下的键盘。</p></div><button id="helpDoneBtn" class="primary-btn">明白了，准备开饭 →</button></dialog>
+  <div id="touchControls" class="touch-controls" aria-label="触屏操作"><div id="touchStick" class="touch-stick" role="group" aria-label="移动摇杆：拖动移动，轻推慢走"><span class="stick-arrow up">↑</span><span class="stick-arrow left">←</span><span class="stick-arrow right">→</span><span class="stick-arrow down">↓</span><span id="stickThumb" class="stick-thumb"></span><span class="stick-caption">轻推慢走</span></div><div class="touch-actions"><div class="touch-utils"><button data-tap="Tab" class="touch-small">换人</button><button data-tap="ShiftLeft" class="touch-small">冲刺</button><button data-tap="KeyQ" class="touch-small">投掷</button></div><div class="touch-primary"><button data-hold="Space" id="touchAction" class="touch-action"><strong id="touchActionLabel">操作</strong><small>按住不放</small><i id="touchActionProgress"></i></button><button data-tap="KeyE" id="touchPick" class="touch-pick"><strong id="touchPickLabel">拿放</strong><small>点一下</small></button></div></div></div>
+  <script type="module" src="./app.js?v=1.1.0"></script>
 </body>
 </html>

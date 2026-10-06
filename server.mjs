@@ -10,7 +10,7 @@ const port = Number(process.env.PORT || 4193);
 const url = `http://127.0.0.1:${port}`;
 const open = () => spawn('cmd.exe', ['/c', 'start', '', url], { windowsHide: true, stdio: 'ignore' }).on('error', () => console.log(`请打开 ${url}`));
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
-const allowed = new Set(['index.html', 'styles.css', 'app.js', 'engine.js', 'renderer.js', 'icon.svg']);
+const allowed = new Set(['index.html', 'styles.css', 'mobile.css', 'app.js', 'engine.js', 'renderer.js', 'camera.js', 'touch-controls.js', 'icon.svg']);
 const server = http.createServer(async (req, res) => {
   if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405).end(); return; }
   try {

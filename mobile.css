@@ -1,0 +1,162 @@
+/* Mobile play has its own viewport. Desktop keeps the original kitchen layout. */
+.mobile-hud,.mobile-inventory,.mobile-pot-alerts,.mobile-camera-note,.ticket-seconds{display:none}
+.touch-stick{touch-action:none;user-select:none;-webkit-user-select:none}
+
+.touch-device .page-heading{padding:18px 4px}
+.touch-device .page-heading p{font-size:12px;line-height:1.7;color:#62715d}
+.touch-device .welcome-card p{font-size:13px;line-height:1.7;color:#66715c}
+.touch-device .welcome-card .tiny-label{font-size:11px}
+.touch-device .mode-choice strong{font-size:14px}
+.touch-device .mode-choice small{font-size:11px;color:#6c765f;line-height:1.4}
+.touch-device .primary-btn{min-height:48px;font-size:15px}
+.touch-device .text-btn{font-size:12px;min-height:40px;line-height:1.5}
+.touch-device .mini-link{font-size:11px}
+.touch-device .welcome-card{width:min(356px,calc(100vw - 48px));padding:26px 22px 14px}
+.touch-device .welcome-card h2{font-size:29px;margin:8px 0}
+.touch-device .welcome-art{height:55px}
+.touch-device .welcome-card p{margin-bottom:14px}
+.touch-device .mode-picker{margin-bottom:12px}
+.touch-device .mode-choice{padding:8px 3px}
+.touch-device .level-meta h3{font-size:14px}
+.touch-device .level-meta p{font-size:11px}
+.touch-device .level-card{min-height:124px;padding:14px 11px}
+.touch-device .level-selected{font-size:10px}
+.touch-device .level-number{font-size:10px}
+.touch-device .level-rating{display:none}
+.touch-device .help-header h2{font-size:23px;line-height:1.5}
+.touch-device .help-flow strong{font-size:15px}
+.touch-device .help-flow p,.touch-device .help-details p{font-size:14px;line-height:1.75;color:#52634a}
+.touch-device .help-details strong{display:block;font-size:15px}
+.touch-device .close-btn{width:44px;height:44px;flex-shrink:0}
+.touch-device dialog{padding:20px;max-height:calc(100dvh - 24px);width:calc(100% - 24px)}
+
+body.mobile-session{height:100dvh;overflow:hidden;overscroll-behavior:none;background:#edf0df}
+.mobile-session .app-shell{max-width:none;padding:0}
+.mobile-session .topbar,.mobile-session .page-heading,.mobile-session .sidebar,.mobile-session .level-section,.mobile-session footer,.mobile-session .kitchen-toolbar{display:none}
+.mobile-session main{padding:0}
+.mobile-session .game-layout{display:block;margin:0}
+.mobile-session .kitchen-panel{
+  position:fixed;inset:0 0 auto;z-index:15;width:100%;
+  height:calc(100dvh - 140px - env(safe-area-inset-bottom));
+  display:grid;grid-template-rows:calc(52px + env(safe-area-inset-top)) 98px minmax(0,1fr) 64px;
+  border:0;border-radius:0;box-shadow:none;overflow:hidden;
+}
+.mobile-session .mobile-hud{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:env(safe-area-inset-top) max(10px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left));background:#fffcef;border-bottom:1px solid #d7dfc9;min-width:0}
+.mobile-clock{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.mobile-clock>span{font-size:23px;color:#657b55}
+.mobile-clock strong{font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:.3px}
+.mobile-clock .urgent{color:#b44930}
+.mobile-revenue{display:flex;flex-direction:column;line-height:1.1;gap:3px;margin-right:auto}
+.mobile-revenue small{font-size:10px;color:#687454}
+.mobile-revenue strong{font-size:18px;color:#677941}
+.mobile-hud nav{display:flex;gap:5px}
+.mobile-hud button{height:44px;min-width:44px;padding:0 8px;font-size:13px;font-weight:650;border:1px solid #ccd8be;border-radius:8px;background:#f1f4e5;color:#405b39;touch-action:manipulation}
+.mobile-hud button[aria-pressed="true"]{background:#5e8153;border-color:#5e8153;color:#fff}
+.mobile-session .orders-bar{height:98px;min-height:0;padding:8px;gap:7px;border-top:0;background:#e8ecd9}
+.mobile-session .orders-label{width:30px;font-size:11px;line-height:1.3;padding-top:8px;color:#4b633f}
+.mobile-session .orders-label small{display:none}
+.mobile-session .order-count{font-size:24px;color:#69815c}
+.mobile-session .orders{height:100%;gap:8px;overflow-x:auto;overflow-y:hidden;min-width:0;padding:1px 1px 2px;scrollbar-width:none;overscroll-behavior:contain;touch-action:pan-x}
+.mobile-session .orders::-webkit-scrollbar{display:none}
+.mobile-session .order-ticket{flex:0 0 144px;min-width:144px;max-width:144px;padding:5px 8px 6px;box-shadow:0 2px #cad2b566;border-color:#c1cdaa}
+.mobile-session .ticket-top{font-size:11px;height:12px;line-height:12px;margin-bottom:3px;color:#597049}
+.mobile-session .ticket-price{display:none}
+.mobile-session .ticket-seconds{display:inline;font-size:11px;font-variant-numeric:tabular-nums;color:#597049}
+.mobile-session .ticket-title{font-size:14px;line-height:18px;color:#2f4837}
+.mobile-session .ticket-ingredients{font-size:22px;line-height:23px;height:23px;margin-top:2px;gap:5px}
+.mobile-session .ticket-ingredients .recipe-method{display:inline-block;font-size:11px;line-height:13px;padding:2px 4px;border-color:#ced6bd;color:#546c42}
+.mobile-session .ticket-track{height:4px;margin-top:4px;background:#dce2cc}
+.mobile-session .ticket-track i{background:#658a4b}
+.mobile-session .order-ticket.urgent{border-color:#cc7450;background:#fff1dc}
+.mobile-session .order-ticket.urgent .ticket-seconds{color:#ad412c;font-weight:700}
+.mobile-session .canvas-wrap{position:relative;width:100%;height:100%!important;min-height:0!important;overflow:hidden;border:0}
+.mobile-session #gameCanvas{display:block;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;object-fit:fill;touch-action:none}
+.mobile-session .mobile-camera-note{display:block;position:absolute;left:10px;bottom:10px;font-size:10px;line-height:1.5;color:#3d583c;background:#fff9e9d9;padding:3px 7px;border-radius:5px;pointer-events:none;max-width:calc(100% - 116px)}
+.mobile-session .mobile-pot-alerts{display:flex;position:absolute;top:8px;left:8px;right:8px;gap:5px;flex-wrap:wrap;pointer-events:none;z-index:2}
+.pot-alert{font-size:12px;font-weight:650;padding:6px 9px;border:1px solid #709277;border-radius:7px;background:#fffdf0e8;color:#385637;box-shadow:0 2px 8px #38563716}
+.pot-alert.ready{background:#eff9d6;color:#466720;border-color:#7ea347}
+.pot-alert.fire,.pot-alert.burnt{background:#fff0d8;color:#a13523;border-color:#c66541}
+.mobile-session .context-bar{display:grid;grid-template-rows:20px 1fr;align-items:start;gap:2px;height:64px;min-height:0;padding:4px 12px;background:#fffbed;border-top:1px solid #bccbaa;color:#425c3c}
+.mobile-session .context-icon,.mobile-session .context-shortcut{display:none}
+.mobile-session .mobile-inventory{display:flex;align-items:center;gap:7px;min-width:0;line-height:20px}
+.mobile-inventory .chef-dot{width:9px;height:9px;flex-shrink:0}
+.mobile-inventory b{font-size:12px;color:#657759}
+.mobile-inventory strong{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mobile-session #contextText{font-size:12px;line-height:16px;color:#506345;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mobile-session .toast{font-size:13px;line-height:1.5;bottom:78px;padding:9px 13px;border-color:#91a779;color:#304c2b;max-width:calc(100% - 24px);white-space:normal;text-align:center}
+.mobile-session .game-overlay{position:fixed;inset:0;z-index:50;overflow:auto;padding:16px;align-items:safe center;touch-action:pan-y;background:#344d415e}
+.mobile-session .modal-card{width:min(380px,100%);flex-shrink:0;transform:none;padding:28px 24px}
+.mobile-session .modal-card h2{font-size:27px}
+.mobile-session .modal-card p{font-size:14px;color:#56694a;line-height:1.7}
+.mobile-session .secondary-btn{min-height:46px;font-size:14px}
+.mobile-session .result-stars{font-size:35px}
+.mobile-session .result-card .result-stats span,.mobile-session .result-score small{font-size:12px;color:#56694a}
+.mobile-session .touch-controls{
+  display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;align-items:center;
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  height:calc(140px + env(safe-area-inset-bottom));
+  padding:8px max(12px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));
+  background:#f6f5e6;border-top:1px solid #ccd4b9;backdrop-filter:none;user-select:none;-webkit-user-select:none;
+}
+.mobile-session:not([data-game-state="playing"]) .touch-controls{visibility:hidden}
+.mobile-session .touch-stick{position:relative;display:block;width:120px;height:120px;border-radius:50%;border:2px solid #91ab7c;background:#e0ead3;box-shadow:inset 0 3px 10px #66845513;flex-shrink:0;pointer-events:auto}
+.stick-thumb{position:absolute;top:50%;left:50%;margin:-26px;width:52px;height:52px;border-radius:50%;background:#fffcef;border:2px solid #9eb78c;box-shadow:0 4px 8px #58774930;pointer-events:none;will-change:transform}
+.stick-arrow{position:absolute;font-size:20px;font-weight:650;color:#516f43;line-height:20px;pointer-events:none}
+.stick-arrow.up{top:5px;left:calc(50% - 8px)}
+.stick-arrow.down{bottom:7px;left:calc(50% - 8px)}
+.stick-arrow.left{left:7px;top:calc(50% - 10px)}
+.stick-arrow.right{right:7px;top:calc(50% - 10px)}
+.stick-caption{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);font-size:10px;line-height:14px;color:#48673a;background:#f6f5e6;border-radius:4px;padding:0 4px;white-space:nowrap}
+.touch-stick.held{border-color:#5a834a}
+.mobile-session .touch-actions{display:grid;grid-template-rows:44px 66px;gap:8px;height:118px;min-width:0;pointer-events:auto}
+.mobile-session .touch-utils{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.mobile-session .touch-primary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mobile-session .touch-actions button{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;overflow:hidden;width:100%;height:100%;min-width:0;min-height:44px;padding:3px;border:1px solid #a9bc95;border-radius:12px;color:#355630;background:#e6eed8;touch-action:none}
+.mobile-session .touch-actions .touch-small{font-size:13px;font-weight:650;border-radius:9px;color:#4a613b;background:#eef1e1;line-height:1.2}
+.mobile-session .touch-actions strong{font-size:20px;line-height:1.2;position:relative;z-index:1}
+.mobile-session .touch-actions small{font-size:11px;line-height:1.2;position:relative;z-index:1}
+.mobile-session .touch-actions .touch-pick{border-color:#af5535;background:#b85d3b;color:#fff9ed}
+.mobile-session .touch-action.available{border-color:#688b4b;background:#dce9c9;color:#355627}
+.mobile-session .touch-action>i{position:absolute;bottom:0;left:0;top:0;width:0;background:#9dbc704a;pointer-events:none}
+.mobile-session .touch-actions button.held{filter:brightness(.88);transform:scale(.97)}
+
+@media(max-width:359px){
+  .mobile-session .mobile-hud{gap:6px;padding-left:8px;padding-right:8px}
+  .mobile-hud nav{gap:4px}.mobile-hud button{padding:0 6px;min-width:44px;font-size:12px}
+  .mobile-clock{gap:3px}.mobile-clock strong{font-size:20px}.mobile-revenue strong{font-size:16px}
+  .mobile-session .touch-controls{grid-template-columns:108px minmax(0,1fr);gap:10px;padding-left:10px;padding-right:10px}
+  .mobile-session .touch-stick{width:108px;height:108px}
+  .mobile-session .touch-primary{gap:6px}.mobile-session .touch-utils{gap:4px}
+  .mobile-session .touch-actions strong{font-size:18px}
+}
+@media(orientation:landscape){
+  .mobile-session .kitchen-panel{display:block;inset:0;height:100dvh}
+  .mobile-session .mobile-hud{position:absolute;left:0;right:0;top:0;height:calc(48px + env(safe-area-inset-top));padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .mobile-session .mobile-hud nav{gap:8px}.mobile-session .mobile-hud button{min-width:52px}
+  .mobile-session .mobile-revenue{flex-direction:row;align-items:baseline;gap:8px;margin-left:16px}
+  .mobile-session .mobile-revenue small{font-size:12px}
+  .mobile-session .orders-bar{position:absolute;left:0;top:calc(48px + env(safe-area-inset-top));bottom:calc(140px + env(safe-area-inset-bottom));width:calc(136px + env(safe-area-inset-left));height:auto;padding:8px 7px 6px max(7px,env(safe-area-inset-left));border-right:1px solid #bdccab}
+  .mobile-session .orders-label{display:none}
+  .mobile-session .orders{display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto;touch-action:pan-y;gap:7px;padding:1px 0 3px}
+  .mobile-session .order-ticket{width:100%;min-width:0;max-width:none;flex:0 0 80px;padding-left:7px;padding-right:7px}
+  .mobile-session .ticket-title{font-size:13px}
+  .mobile-session .canvas-wrap{position:absolute;left:calc(136px + env(safe-area-inset-left));right:calc(174px + env(safe-area-inset-right));top:calc(48px + env(safe-area-inset-top));bottom:0;height:auto!important;width:auto}
+  .mobile-session .context-bar{position:absolute;right:0;top:calc(48px + env(safe-area-inset-top));bottom:calc(140px + env(safe-area-inset-bottom));width:calc(174px + env(safe-area-inset-right));height:auto;display:flex;flex-direction:column;justify-content:flex-start;gap:10px;padding:13px max(12px,env(safe-area-inset-right)) 8px 12px;border-left:1px solid #bdccab;border-top:0}
+  .mobile-session .mobile-inventory{flex-wrap:wrap;gap:4px 7px;flex-shrink:0}
+  .mobile-session .mobile-inventory strong{flex-basis:100%;font-size:15px;white-space:normal}
+  .mobile-session #contextText{font-size:13px;line-height:1.6;-webkit-line-clamp:5}
+  .mobile-session .touch-controls{height:calc(140px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;gap:0;pointer-events:none;border:0;background:transparent;isolation:isolate;padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}
+  .mobile-session .touch-controls:before,.mobile-session .touch-controls:after{content:"";position:absolute;top:0;bottom:0;background:#f6f5e6;z-index:-1}
+  .mobile-session .touch-controls:before{left:0;width:calc(136px + env(safe-area-inset-left));border-right:1px solid #bdccab}
+  .mobile-session .touch-controls:after{right:0;width:calc(174px + env(safe-area-inset-right));border-left:1px solid #bdccab}
+  .mobile-session .touch-stick{width:120px;height:120px}
+  .mobile-session .touch-actions{width:158px;flex-shrink:0;display:grid}
+  .mobile-session .touch-actions .touch-small{font-size:12px}
+  .mobile-session .touch-actions strong{font-size:18px}
+  .mobile-session .touch-primary{gap:6px}
+  .mobile-session .mobile-camera-note{font-size:9px}
+  .mobile-session .pot-alert{font-size:11px;padding:5px 7px}
+  .mobile-session .toast{bottom:75px;font-size:12px}
+  .mobile-session .game-overlay{padding:12px}
+  .mobile-session .modal-card{padding:22px}
+}

@@ -102,7 +102,7 @@ export class KitchenGame {
     const length = Math.hypot(dx, dy); dx /= length; dy /= length;
     if (Math.abs(dx) > Math.abs(dy)) { player.dx = Math.sign(dx); player.dy = 0; }
     else { player.dx = 0; player.dy = Math.sign(dy); }
-    const speed = player.dashTime > 0 ? 7.8 : 3.25;
+    const speed = (player.dashTime > 0 ? 7.8 : 3.25) * Math.min(1, length);
     const steps = Math.ceil(speed * dt / .12);
     for (let i = 0; i < steps; i++) {
       const nx = player.x + dx * speed * dt / steps, ny = player.y + dy * speed * dt / steps;

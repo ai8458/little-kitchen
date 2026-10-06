@@ -1,16 +1,21 @@
-import { INGREDIENTS } from './engine.js';
+import { INGREDIENTS } from './engine.js?v=1.1.0';
+import { kitchenCamera } from './camera.js?v=1.1.0';
 
 const COLORS = ['#e97858', '#4c9792'];
 export class KitchenRenderer {
   constructor(canvas) {
     this.canvas = canvas; this.ctx = canvas.getContext('2d');
-    this.width = 1120; this.height = 730; this.time = 0; this.fx = [];
+    this.width = 1120; this.height = 730; this.time = 0; this.fx = []; this.overview = false; this.focus = null;
     this.resize();
   }
   resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.canvas.width = this.width * dpr; this.canvas.height = this.height * dpr;
-    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.mobile = document.body.classList.contains('mobile-session');
+    this.dpr = Math.min(window.devicePixelRatio || 1, 3);
+    this.viewWidth = this.mobile ? Math.max(1, this.canvas.clientWidth) : this.width;
+    this.viewHeight = this.mobile ? Math.max(1, this.canvas.clientHeight) : this.height;
+    const width = Math.round(this.viewWidth * this.dpr), height = Math.round(this.viewHeight * this.dpr);
+    if (this.canvas.width !== width || this.canvas.height !== height) { this.canvas.width = width; this.canvas.height = height; this.focus = null; }
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
   }
   point(x, y) { return [66 + x * 76, 83 + y * 65]; }
   round(x, y, w, h, r, fill, stroke) {
@@ -102,7 +107,7 @@ export class KitchenRenderer {
     if (s.type === 'crate') {
       this.round(x - 29, y - 28, 58, 34, 3, '#b18a5e'); this.round(x - 25, y - 24, 50, 24, 2, '#967850');
       this.ingredient(s.ingredient, x - 13, y - 15, .66); this.ingredient(s.ingredient, x + 13, y - 15, .68); this.ingredient(s.ingredient, x, y - 8, .72);
-      this.round(x - 19, y + 10, 38, 14, 2, '#fff4d9'); this.text(INGREDIENTS[s.ingredient].name, x, y + 17, 9, '#816746');
+      this.round(x - 22, y + 9, 44, 17, 2, '#fff4d9'); this.text(INGREDIENTS[s.ingredient].name, x, y + 17, this.mobile ? 14 : 9, '#655232');
     } else if (s.type === 'board') {
       this.round(x - 28, y - 28, 54, 32, 4, '#d6a36d', '#b88955');
       for (let i = 0; i < 5; i++) this.line(x - 22 + i * 10, y - 23, x - 22 + i * 10, y - 2, '#b17b4320', 1);
@@ -158,7 +163,7 @@ export class KitchenRenderer {
     if (s.progress > 0) this.progress(x, y - 48, s.progress, s.type === 'sink' ? '#72b6b2' : '#e9ad61');
     if (highlight >= 0) {
       c.strokeStyle = COLORS[highlight]; c.lineWidth = 3; c.beginPath(); c.roundRect(x - 35, y - 34, 70, 47, 5); c.stroke();
-      this.round(x - 10, y + 27, 20, 17, 5, COLORS[highlight]); this.text(highlight === 1 && game.mode === 'duo' ? '↵' : 'E', x, y + 35, 10, '#fff', 800);
+      if (!this.mobile) { this.round(x - 10, y + 27, 20, 17, 5, COLORS[highlight]); this.text(highlight === 1 && game.mode === 'duo' ? '↵' : 'E', x, y + 35, 10, '#fff', 800); }
     }
   }
   chef(p, game) {
@@ -188,19 +193,29 @@ export class KitchenRenderer {
     this.round(x - 13, y - 91, 26, 17, 7, selected ? color : '#9da89c'); this.text(`P${p.id + 1}`, x, y - 82, 10, '#fff', 800);
     if (p.held) { this.ellipse(x + p.dx * 14, y - 20, 22, 8, '#45554112'); this.item(p.held, x + p.dx * 15, y - 24 + p.dy * 6, .82); }
     if (p.action && p.held?.kind === 'extinguisher') for (let i = 0; i < 8; i++) { const f = (this.time * 2 + i / 8) % 1; this.ellipse(x + p.dx * (20 + f * 45) + Math.sin(i * 2) * f * 9, y - 25 + p.dy * f * 40, 5 + f * 9, 3 + f * 6, '#f9fff5b0'); }
-    if (p.hintTime > 0) {
+    if (p.hintTime > 0 && !this.mobile) {
       c.font = '600 11px "Microsoft YaHei", sans-serif'; const w = Math.min(330, c.measureText(p.hint).width + 24);
       const bx = Math.max(15 + w / 2, Math.min(this.width - w / 2 - 15, x));
       this.round(bx - w / 2, y - 123, w, 24, 8, '#fffcef', '#ddd9bd'); this.text(p.hint, bx, y - 111, 11, '#4e6156');
     }
   }
   label(text, x, y, color = '#f7f4e5', ink = '#687a66') {
-    this.ctx.font = '600 11px "Microsoft YaHei"'; const w = this.ctx.measureText(text).width + 24;
-    this.round(x - w / 2, y - 10, w, 22, 5, color); this.text(text, x, y + 1, 11, ink);
+    const size = this.mobile ? 14 : 11;
+    this.ctx.font = `600 ${size}px "Microsoft YaHei"`; const w = this.ctx.measureText(text).width + 18;
+    this.round(x - w / 2, y - 10, w, 23, 5, color); this.text(text, x, y + 1, size, this.mobile ? '#455e43' : ink);
   }
   draw(game, dt = .016) {
     this.time += dt;
-    const c = this.ctx; c.clearRect(0, 0, this.width, this.height);
+    const c = this.ctx;
+    c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0); c.clearRect(0, 0, this.viewWidth, this.viewHeight);
+    c.fillStyle = '#dce6d4'; c.fillRect(0, 0, this.viewWidth, this.viewHeight);
+    const player = game.players[game.activePlayer], [px, py] = this.point(player.x, player.y);
+    const desired = { x: px + player.dx * 42, y: py - 24 + player.dy * 28 };
+    if (!this.focus || this.focus.player !== player.id) this.focus = { ...desired, player: player.id };
+    const blend = 1 - Math.exp(-12 * dt);
+    this.focus.x += (desired.x - this.focus.x) * blend; this.focus.y += (desired.y - this.focus.y) * blend;
+    this.camera = kitchenCamera(this.viewWidth, this.viewHeight, { mobile: this.mobile, overview: this.overview, focus: this.focus });
+    c.save(); c.scale(this.camera.scale, this.camera.scale); c.translate(-this.camera.x, -this.camera.y);
     const gradient = c.createLinearGradient(0, 0, 0, 730); gradient.addColorStop(0, '#d8e5d4'); gradient.addColorStop(1, '#ecedd9'); c.fillStyle = gradient; c.fillRect(0, 0, 1120, 730);
     for (let i = 0; i < 70; i++) this.ellipse((i * 191 + 36) % 1120, (i * 157 + 19) % 730, 1.3, .7, '#798e5c22');
     this.ellipse(560, 638, 455, 36, '#54674513');
@@ -238,6 +253,16 @@ export class KitchenRenderer {
       c.globalAlpha = Math.min(1, f.life); this.text(f.text, f.x, f.y, 26, '#568371', 900); c.globalAlpha = 1;
     }
     this.fx = this.fx.filter(f => f.life > 0);
+    c.restore();
+    if (this.mobile && !this.overview) this.minimap(game);
+  }
+  minimap(game) {
+    const c = this.ctx, w = 90, h = 57, x = this.viewWidth - w - 10, y = this.viewHeight - h - 10;
+    c.save(); this.round(x, y, w, h, 7, '#fffcefec', '#78927880');
+    const sx = (w - 10) / 11, sy = (h - 10) / 7;
+    for (const station of game.stations) this.round(x + 5 + (station.x - 1.5) * sx, y + 5 + (station.y - 1.5) * sy, sx - 1, sy - 1, 1, station.type === 'serve' ? '#ce7954' : station.type === 'stove' && station.state === 'fire' ? '#ea4632' : '#9aaf8c');
+    for (const player of game.players) this.ellipse(x + 5 + (player.x - 1) * sx, y + 5 + (player.y - 1) * sy, player.id === game.activePlayer ? 3.4 : 2.3, player.id === game.activePlayer ? 3.4 : 2.3, COLORS[player.id]);
+    c.restore();
   }
   celebrate(earned) { this.fx.push({ x: 907, y: 290, text: `+${earned}`, life: 2 }); }
 }
